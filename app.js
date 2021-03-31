@@ -5,11 +5,11 @@ const logger = require('morgan');
 
 const db = require('./models')
 
-db.sequelize.authenticate()
+db.authenticate()
 	.then(() => console.log('database connection established'))
 	.catch((e) => console.error('database connection failed', e));
 
-db.sequelize.sync({force: true})
+db.sync({force: true})
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');

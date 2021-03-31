@@ -12,9 +12,4 @@ models.forEach(m => {
 	require(`./${m}.model.js`)(sequelize)
 })
 
-const db = {
-	sequelize,
-	Sequelize
-}
-
-module.exports = db 
+module.exports = sequelize
