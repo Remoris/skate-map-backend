@@ -11,8 +11,8 @@ db.authenticate()
 
 db.sync({force: true})
 
-const indexRouter = require('./routes/index');
-const apiRouter = require('./routes/api');
+const indexRouter = require('./routes/index.js');
+const apiRouter = require('./routes/api.router.js');
 
 const app = express();
 
