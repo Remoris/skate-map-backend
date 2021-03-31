@@ -3,18 +3,17 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const db = require('./models')
 
-const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('postgres://remopas:@localhost:5432/skate-map');
-
-
-sequelize.authenticate()
+db.sequelize.authenticate()
 	.then(() => console.log('database connection established'))
 	.catch((e) => console.error('database connection failed', e));
 
-sequelize.sync({force: true})
+db.sequelize.sync({force: true})
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+
 
 const app = express();
 

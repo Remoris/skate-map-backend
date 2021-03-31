@@ -3,7 +3,7 @@ const { Sequelize, DataTypes, Model } = require('sequelize')
 class Location extends Model{}
 
 module.exports = (sequelize) => {
-	Location.init({
+	return Location.init({
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false
@@ -11,7 +11,8 @@ module.exports = (sequelize) => {
 		id: {
 			type: DataTypes.UUID,
 			defaultValue: Sequelize.UUIDV4,
-			allowNull: false
+			allowNull: false,
+			primaryKey: true
 		}
 	}, {
 		sequelize,
