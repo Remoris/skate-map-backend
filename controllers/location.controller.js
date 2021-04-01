@@ -9,12 +9,12 @@ module.exports = {
 		}
 
 		if(req.query.q){
-			where['name'] = {[Op.like]: req.query.q}
+			where['name'] = {[Op.iLike]: `%${req.query.q}%`}
 		}
 
 		Location.findAll({
 			where,
-			attributes: ['name', 'difficulty', 'id'],
+			attributes: ['name', 'difficulty', 'id', 'image'],
 			include: {
 				model: db.models.Coordinate,
 				as: 'coords',

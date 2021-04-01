@@ -8,15 +8,18 @@ module.exports = (sequelize) => {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-		difficulty: {
-			type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
-			allowNull: false
-		},
 		id: {
 			type: DataTypes.UUID,
 			defaultValue: Sequelize.UUIDV4,
 			allowNull: false,
 			primaryKey: true
+		},
+		image: {
+			type: DataTypes.STRING
+		},
+		difficulty: {
+			type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
+			allowNull: false
 		}
 	}, {
 		sequelize,
