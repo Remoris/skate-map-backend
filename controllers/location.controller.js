@@ -12,8 +12,15 @@ module.exports = {
 			where['name'] = {[Op.like]: req.query.q}
 		}
 
-		const locations = await Location.findAll({where})	
+		Location.findAll({
+			where,
+			attributes: ['name', 'difficulty', 'id'],
+			include: {
+				model: db.models.Coordinate,
+				as: 'coords',
+				attributes: ['latitude', 'longitude']
+			}
+		}).then((locations) => res.json(locations.map(l => l.toJSON())))	
 
-		console.log(locations)
 	}
 }

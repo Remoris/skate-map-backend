@@ -9,7 +9,16 @@ db.authenticate()
 	.then(() => console.log('database connection established'))
 	.catch((e) => console.error('database connection failed', e));
 
-db.sync({force: true})
+const locations = require('./placeholder.json').locations
+
+db.sync({force: true}).then(() => {
+	locations.forEach(l => db.models.Location.create(l, {
+		include: [{
+			association: db.models.Location.Coordinate
+		}]
+	}))
+})
+
 
 const indexRouter = require('./routes/index.js');
 const apiRouter = require('./routes/api.router.js');

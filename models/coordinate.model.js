@@ -1,15 +1,15 @@
 const { Sequelize, DataTypes, Model } = require('sequelize')
 
-class Location extends Model{}
+class Coordinate extends Model{}
 
 module.exports = (sequelize) => {
-	return Location.init({
-		name: {
-			type: DataTypes.STRING,
+	return Coordinate.init({
+		latitude: {
+			type: DataTypes.FLOAT,
 			allowNull: false
 		},
-		difficulty: {
-			type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
+		longitude: {
+			type: DataTypes.FLOAT,
 			allowNull: false
 		},
 		id: {
@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
 		}
 	}, {
 		sequelize,
-		modelName: 'Location'
+		modelName: 'Coordinate'
 	})
 }
 
