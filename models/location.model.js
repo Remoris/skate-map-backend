@@ -1,6 +1,15 @@
 const { Sequelize, DataTypes, Model } = require('sequelize')
 
-class Location extends Model{}
+class Location extends Model{
+
+	setCoords(){
+		this.coords = {
+			latitude: this.getDataValue('coords').coordinates[1],
+			longitude: this.getDataValue('coords').coordinates[0]
+		}
+	}
+
+}
 
 module.exports = (sequelize) => {
 	return Location.init({
@@ -20,6 +29,9 @@ module.exports = (sequelize) => {
 		difficulty: {
 			type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
 			allowNull: false
+		},
+		coords: {
+			type: Sequelize.GEOGRAPHY('POINT')
 		}
 	}, {
 		sequelize,

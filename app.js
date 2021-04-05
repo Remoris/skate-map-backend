@@ -12,11 +12,10 @@ db.authenticate()
 const locations = require('./placeholder.json').locations
 
 db.sync({force: true}).then(() => {
-	locations.forEach(l => db.models.Location.create(l, {
-		include: [{
-			association: db.models.Location.Coordinate
-		}]
-	}))
+	locations.forEach(l => {
+		l.coords = db.Sequelize.fn('ST_MakePoint', l.coords.longitude, l.coords.latitude)
+		db.models.Location.create(l)
+	})
 })
 
 
