@@ -20,7 +20,8 @@ module.exports = {
 				as: 'coords',
 				attributes: ['latitude', 'longitude']
 			}
-		}).then((locations) => res.json(locations.map(l => l.toJSON())))	
-
+		}).then((locations)=> res.json({
+			locations: locations.map(l => l.toJSON())
+		}))
 	}
 }
