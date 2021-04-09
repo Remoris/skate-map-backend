@@ -8,7 +8,8 @@ module.exports = (sequelize) => {
 	return SkateObject.init({
 		name: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: false,
+			unique: true
 		},
 		id: {
 			type: DataTypes.UUID,
