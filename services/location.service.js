@@ -1,43 +1,44 @@
+const { Finder } = require('../util.js')
 const db = require('../models')
 const { Op } = db.Sequelize
 const { Location, SkateObject } = db.models
 
-const createFinder = () => ({
-	where: {},
-	order: [],
-	attributes: [],
-	include: {}
-})
-
 module.exports = {
 
-	async getLocations(query, sort, include, exclude, userLocation){
+	async getLocations(query, sort, filters, userLocation){
 
-		let finder = createFinder()
-		let { latitude, longitude } = userLocation
+		let finder = Finder()
 
 		finder.attributes = ['name', 'difficulty', 'id', 'image', 'coords']
 		
-		finder.include = {
-			model:SkateObject,
-			as: 'objects',
-			attributes: ['name'],
-			through: { attributes: []}
-		}
-		
+		finder.include = [
+			{ 
+				model: SkateObject,
+				as: 'objects',
+				attributes: ['name'],
+				through: { attributes: []}
+			}
+		]
+	
 		// Querying
 		finder.where = query ? {
 			name: {[Op.iLike]: `%${query}%`}
 		} : {}
 		
 		// Filtering
-		let filterMap = {
-			'object': '',
-			'tag': ''
+		const filterMap = {
+			'has': 'objects'
 		}
-		
+
+		Object.entries(filters).forEach(([key, values]) => {
+			if(key in filterMap){
+				finder.where[`$${filterMap[key]}.name$`] = values
+			}	
+		})
+
 		// Sorting
-		if(sort === 'distance' && latitude !== Number.NaN && longitude !== Number.NaN){
+		let { latitude, longitude } = userLocation
+		if(sort === 'distance' && !Number.isNaN(latitude) && !Number.isNaN(longitude)){
 			finder.attributes.push([
 				db.Sequelize.fn(
 					'ST_Distance', 
