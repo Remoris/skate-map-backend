@@ -11,7 +11,9 @@ module.exports = {
 		let attributes = ['name', 'difficulty', 'id', 'image', 'coords']
 		let include = {
 			model:SkateObject,
-			as: 'objects'
+			as: 'objects',
+			attributes: ['name'],
+			through: { attributes: []}
 		} 
 
 		if(req.query.q){
