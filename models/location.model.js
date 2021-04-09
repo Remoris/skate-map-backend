@@ -2,7 +2,7 @@ const { Sequelize, DataTypes, Model } = require('sequelize')
 
 class Location extends Model{
 
-	setCoords(){
+	reMapCoords(){
 		this.coords = {
 			latitude: this.getDataValue('coords').coordinates[1],
 			longitude: this.getDataValue('coords').coordinates[0]
