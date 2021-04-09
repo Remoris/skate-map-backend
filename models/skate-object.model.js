@@ -16,10 +16,7 @@ module.exports = (sequelize) => {
 			defaultValue: Sequelize.UUIDV4,
 			allowNull: false,
 			primaryKey: true
-		},
-		icon: {
-			type: DataTypes.STRING
-		}	
+		}
 	}, {
 		sequelize,
 		modelName: 'SkateObject'

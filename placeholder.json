@@ -34,7 +34,12 @@
       "coords": {
         "latitude": 51.91693,
         "longitude": 4.47623
-      }
+      },
+      "objects" : [
+        {
+          "name": "Half Pipe"
+        }
+      ]
     }
   ]
 }
