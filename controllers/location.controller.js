@@ -3,6 +3,7 @@ const { Op } = db.Sequelize
 const { Location, SkateObject } = db.models
 
 module.exports = {
+	
 	async getLocations(req, res){
 
 		let where = {}
@@ -17,8 +18,12 @@ module.exports = {
 			where['name'] = {[Op.iLike]: `%${req.query.q}%`}
 		}
 
+		if(req.query.filter){
+			let filter = Array.isArray(req.query.filter) ? req.query.filter : [req.query.filter]
+			console.log(filter)
+		}
+
 		if(req.query.sort === 'distance' && req.query.latitude && req.query.longitude){
-			
 			attributes.push([
 				db.Sequelize.fn(
 					'ST_Distance', 
@@ -27,7 +32,6 @@ module.exports = {
 				),
 				'sort_distance'
 			])
-
 			order = db.Sequelize.literal('sort_distance ASC')
 		}
 
