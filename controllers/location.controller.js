@@ -1,6 +1,6 @@
 const db = require('../models')
 const { Op } = db.Sequelize
-const { Location } = db.models
+const { Location, SkateObject } = db.models
 
 module.exports = {
 	async getLocations(req, res){
@@ -8,6 +8,10 @@ module.exports = {
 		let where = {}
 		let order = []
 		let attributes = ['name', 'difficulty', 'id', 'image', 'coords']
+		let include = {
+			model:SkateObject,
+			as: 'objects'
+		} 
 
 		if(req.query.q){
 			where['name'] = {[Op.iLike]: `%${req.query.q}%`}
@@ -30,6 +34,7 @@ module.exports = {
 		Location.findAll({
 			where,
 			attributes,
+			include,
 			order
 		}).then((locations) => {
 			

@@ -17,6 +17,9 @@ module.exports = (sequelize) => {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
+		coords: {
+			type: Sequelize.GEOGRAPHY('POINT')
+		},
 		id: {
 			type: DataTypes.UUID,
 			defaultValue: Sequelize.UUIDV4,
@@ -28,11 +31,7 @@ module.exports = (sequelize) => {
 		},
 		difficulty: {
 			type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
-			allowNull: false
-		},
-		coords: {
-			type: Sequelize.GEOGRAPHY('POINT')
-		}
+		}	
 	}, {
 		sequelize,
 		modelName: 'Location'
