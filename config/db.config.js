@@ -1,8 +1,8 @@
 
 module.exports = {
-	HOST: 'localhost',
-	USER: 'remopas',
-	PASSWORD: '',
-	DB: 'skate-map',
+	HOST: 'db',
+	USER: 'postgres',
+	PASSWORD: 'postgres',
+	DB: 'postgres',
 	dialect: 'postgresql'
 }

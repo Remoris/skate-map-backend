@@ -1,45 +1,44 @@
-const db = require('../models')
-const { Op } = db.Sequelize
-const { Location } = db.models
+const locationService = require('../services/location.service.js')
+
+const splitFilters = (filters) => filters.map(f => f.split(':', 2)).map(([key, value]) => ({key, value}))
+const groupFilters = (filters) => filters
+	.reduce((res, {key, value}) => {	
+		if(key in res === false){
+			res[key] = []
+		}
+		res[key].push(value)
+		return res
+	}, {})
+
 
 module.exports = {
+	
 	async getLocations(req, res){
+		
+		let query = req.query.q ? req.query.q : ''
+		let sort = req.query.sort ? req.query.sort : ''
+		
+		let filters = Array.isArray(req.query.filter) ? req.query.filter : [req.query.filter].filter(Boolean)
+		filters = groupFilters(splitFilters(filters, 'filter'))
 
-		let where = {}
-		let order = []
-		let attributes = ['name', 'difficulty', 'id', 'image', 'coords']
-
-		if(req.query.q){
-			where['name'] = {[Op.iLike]: `%${req.query.q}%`}
+		let userLocation = {
+			latitude: parseFloat(req.query.latitude),
+			longitude: parseFloat(req.query.longitude)
 		}
 
-		if(req.query.sort === 'distance' && req.query.latitude && req.query.longitude){
-			
-			attributes.push([
-				db.Sequelize.fn(
-					'ST_Distance', 
-					db.Sequelize.col('coords'),
-					db.Sequelize.fn('ST_MakePoint', req.query.longitude, req.query.latitude)
-				),
-				'sort_distance'
-			])
+		locationService.getLocations(query, sort, filters, userLocation)
+			.then(locations => res.json({locations}))
 
-			order = db.Sequelize.literal('sort_distance ASC')
-		}
+	},
 
-		Location.findAll({
-			where,
-			attributes,
-			order
-		}).then((locations) => {
-			
-			locations.forEach(l => {
-				l.setCoords()
-			})
+	async getSkateObjects(req, res){
+		locationService.getSkateObjects()
+			.then(objects => res.json({objects}))
+	},
 
-			locations = locations.map(l => l.toJSON())
-
-			return res.json({ locations })
-		})
+	async getTags(req, res){
+		locationService.getTags()
+			.then(tags => res.json({tags}))
 	}
+
 }
