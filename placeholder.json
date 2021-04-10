@@ -25,7 +25,10 @@
       "coords": {
         "latitude": 52.34621,
         "longitude": 4.86644
-      }
+      },
+      "objects": [
+        {"name": "Half1 Pipe"}
+      ]
     },
     {
       "name": "Rotterdam Zuid",
@@ -34,7 +37,12 @@
       "coords": {
         "latitude": 51.91693,
         "longitude": 4.47623
-      }
+      },
+      "objects" : [
+        {
+          "name": "Half Pipe"
+        }
+      ]
     }
   ]
 }
