@@ -8,7 +8,8 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 	dialect: dbConfig.dialect
 });
 
-const modelNames = ['location', 'skate-object']
+const modelNames = ['location', 'skate-object', 'tag']
+
 modelNames.forEach(m => {
 	require(`./${m}.model.js`)(sequelize)
 })

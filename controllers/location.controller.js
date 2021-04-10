@@ -29,5 +29,16 @@ module.exports = {
 		locationService.getLocations(query, sort, filters, userLocation)
 			.then(locations => res.json({locations}))
 
+	},
+
+	async getSkateObjects(req, res){
+		locationService.getSkateObjects()
+			.then(objects => res.json({objects}))
+	},
+
+	async getTags(req, res){
+		locationService.getTags()
+			.then(tags => res.json({tags}))
 	}
+
 }

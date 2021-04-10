@@ -1,13 +1,12 @@
-const { Finder } = require('../util.js')
 const db = require('../models')
 const { Op } = db.Sequelize
-const { Location, SkateObject } = db.models
+const { Location, SkateObject, Tag } = db.models
 
 module.exports = {
 
 	async getLocations(query, sort, filters, userLocation){
 
-		let finder = Finder()
+		let finder = {}
 
 		finder.attributes = ['name', 'difficulty', 'id', 'image', 'coords']
 		
@@ -15,6 +14,12 @@ module.exports = {
 			{ 
 				model: SkateObject,
 				as: 'objects',
+				attributes: ['name'],
+				through: { attributes: []}
+			},
+			{
+				model: Tag,
+				as: 'tags',
 				attributes: ['name'],
 				through: { attributes: []}
 			}
@@ -27,7 +32,8 @@ module.exports = {
 		
 		// Filtering
 		const filterMap = {
-			'has': 'objects'
+			'has': 'objects',
+			'is': 'tags'
 		}
 
 		Object.entries(filters).forEach(([key, values]) => {
@@ -51,15 +57,24 @@ module.exports = {
 		}
 
 		// Fetching
-		locations = await Location.findAll(finder)
-		
-		// Transforming
-		locations.forEach(l => l.reMapCoords())
-		locations = locations.map(l => l.toJSON())
-		locations.forEach(l => l.objects = l.objects.map(o => o.name))
+		return Location.findAll(finder)
+			.then(locations => locations.map(l => {
+				l.reMapCoords()
+				l = l.toJSON()
+				l.objects = l.objects.map(o => o.name)
+				l.tags = l.tags.map(t => t.name)
+				return l
+			}))
+	},
 
-		return locations
+	async getSkateObjects(){
+		return SkateObject.findAll({ attributes: ['name']})
+			.then(objects => objects.map(o => o.name))
+	},
 
+	async getTags(){
+		return Tag.findAll({ attributes: ['name'] })
+			.then(tags => tags.map(t => t.name))
 	}
 
 }
