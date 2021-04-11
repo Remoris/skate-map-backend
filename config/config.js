@@ -19,7 +19,12 @@ configs = {
 		database: {
 			use_env_variable: 'DATABASE_URL',
 			options: {
-				dialect: 'postgres'
+				dialect: 'postgres',
+				dialectOptions: {
+					ssl: {
+						rejectUnauthorized: false
+					}
+				}
 			}
 		}
 	}
