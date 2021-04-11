@@ -20,6 +20,7 @@ configs = {
 			use_env_variable: 'DATABASE_URL',
 			options: {
 				dialect: 'postgres',
+				native: true,
 				dialectOptions: {
 					ssl: {
 						rejectUnauthorized: false

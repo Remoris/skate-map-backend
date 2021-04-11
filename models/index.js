@@ -7,7 +7,7 @@ const { Sequelize } = require('sequelize');
 let sequelize;
 
 if(dbConfig.use_env_variable){
-	sequelize = new Sequelize(process.env[dbConfig.use_env_variable], dbConfig.options);
+	sequelize = new Sequelize(`${process.env[dbConfig.use_env_variable]}?sslmode=require`, dbConfig.options);
 }else{
 	sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, dbConfig.options);
 }
