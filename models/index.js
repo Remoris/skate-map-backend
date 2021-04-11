@@ -1,19 +1,22 @@
 
-const dbConfig = require('../config/db.config.js')
+const dbConfig = require('../config/config.js').database
 
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-	host: dbConfig.HOST,
-	dialect: dbConfig.dialect
-});
+// Database initialization
+let sequelize;
 
+if(dbConfig.use_env_variable){
+	sequelize = new Sequelize(process.env[dbConfig.use_env_variable], dbConfig.options);
+}else{
+	sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, dbConfig.options);
+}
+
+// Reading models
 const modelNames = ['location', 'skate-object', 'tag']
-
 modelNames.forEach(m => {
 	require(`./${m}.model.js`)(sequelize)
 })
-
 const models = sequelize.models
 
 // Associations
