@@ -42,6 +42,9 @@ const setupDB = () => db.sync({force: true}).then(() => {
 			}]
 		})
 	})
+}).catch(e => {
+	console.error(e)
+	process.exit(1)
 })
 
 connectDB();
