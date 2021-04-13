@@ -1,19 +1,7 @@
 const locationService = require('../services/location.service.js')
+const { splitFilters, groupFilters } = require('../util.js')
 
-const splitFilters = (filters) => filters.map(f => f.split(':', 2)).map(([key, value]) => ({key, value}))
-const groupFilters = (filters) => filters
-	.reduce((res, {key, value}) => {	
-		if(key in res === false){
-			res[key] = []
-		}
-		res[key].push(value)
-		return res
-	}, {})
-
-
-module.exports = {
-	
-	async getLocations(req, res){
+module.exports.get = (req, res) => {
 		
 		let query = req.query.q ? req.query.q : ''
 		let sort = req.query.sort ? req.query.sort : ''
@@ -26,19 +14,25 @@ module.exports = {
 			longitude: parseFloat(req.query.longitude)
 		}
 
-		locationService.getLocations(query, sort, filters, userLocation)
+		locationService.find(query, sort, filters, userLocation)
 			.then(locations => res.json({locations}))
 
-	},
+}
 
-	async getSkateObjects(req, res){
-		locationService.getSkateObjects()
-			.then(objects => res.json({objects}))
-	},
+module.exports.post = (req, res) => {
+	
+}
 
-	async getTags(req, res){
-		locationService.getTags()
-			.then(tags => res.json({tags}))
-	}
+module.exports.skateObject = {
+	get: async (req, res) => locationService.skateObject.findAll()
+			.then(objects => res.json({objects})),
 
+	post: async (req, res) => locationService.skateObject.create(req.body.)
+}
+
+module.exports.tag =	{
+	get: async (req, res) => locationService.tag.findAll()
+			.then(tags => res.json({tags})),
+
+	post: async(req, res) => locationService.tag.create()
 }

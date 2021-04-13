@@ -12,13 +12,17 @@ const apiRouter = require('./routes/api.router.js');
 
 const setupApp = () => {
 	const app = express();
+	
 	app.use(logger('dev'));
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: false }));
 	app.use(cookieParser());
 	app.use(express.static(path.join(__dirname, 'public')));
+	
 	app.use('/', indexRouter);
+	
 	app.use('/api/v1', apiRouter);
+
 	return app
 }
 
