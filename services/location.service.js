@@ -65,7 +65,7 @@ module.exports.find = async (query, sort, filters, userLocation) => {
 		}))
 }
 
-module.exports.create =	async (name) => {
+module.exports.create =	async () => {
 		
 }
 

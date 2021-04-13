@@ -4,8 +4,16 @@ const { splitFilters, groupFilters } = require('../util.js')
 module.exports.get = (req, res) => {
 		
 		let query = req.query.q ? req.query.q : ''
-		let sort = req.query.sort ? req.query.sort : ''
+		let sort = ''
 		
+		if(req.query.sort){
+			if(!['distance', 'popularity', 'rating'].includes(sort)){
+				throw new Error(`unkown sort key '${sort}'`)
+			}else{
+				sort = req.query.sort 
+			}
+		}
+
 		let filters = Array.isArray(req.query.filter) ? req.query.filter : [req.query.filter].filter(Boolean)
 		filters = groupFilters(splitFilters(filters, 'filter'))
 
@@ -20,19 +28,22 @@ module.exports.get = (req, res) => {
 }
 
 module.exports.post = (req, res) => {
-	
+
 }
 
 module.exports.skateObject = {
 	get: async (req, res) => locationService.skateObject.findAll()
-			.then(objects => res.json({objects})),
+		.then(objects => res.json({objects})),
 
-	post: async (req, res) => locationService.skateObject.create(req.body.)
+	post: async (req, res) => locationService.skateObject.create(req.body.name)
+		.then(object => res.json({result: object.toJSON()}))
 }
 
 module.exports.tag =	{
 	get: async (req, res) => locationService.tag.findAll()
-			.then(tags => res.json({tags})),
+		.then(tags => res.json({tags})),
 
-	post: async(req, res) => locationService.tag.create()
+	post: async(req, res) => locationService.tag.create(req.body.name)
+		.then(tag => res.json({result: tag.toJSON()}))
 }
+
