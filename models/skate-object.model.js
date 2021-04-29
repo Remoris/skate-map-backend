@@ -12,6 +12,7 @@ module.exports = (sequelize) => {
 		}
 	}, {
 		sequelize,
+		timestamps: false,
 		modelName: 'SkateObject'
 	})
 }

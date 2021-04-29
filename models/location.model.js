@@ -11,31 +11,46 @@ class Location extends Model{
 
 }
 
-module.exports = (sequelize) => {
-	return Location.init({
-		name: {
-			type: DataTypes.STRING,
-			allowNull: false
+module.exports = (sequelize) => Location.init({
+	
+	name: {
+		type: DataTypes.STRING,
+		allowNull: false
+	},
+
+	id: {
+		type: DataTypes.UUID,
+		defaultValue: Sequelize.UUIDV4,
+		allowNull: false,
+		primaryKey: true
+	},
+
+	coords: {
+		type: Sequelize.GEOGRAPHY('POINT')
+	},
+
+	image: {
+		type: DataTypes.STRING
+	},
+
+	difficulty: {
+		type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
+	},	
+
+	averageRating: {
+		type: DataTypes.VIRTUAL,
+		get(){
+			if(this.ratings && this.ratings.length > 0){
+				return this.ratings.map(r => r.stars).reduce((p, c) => p + c, 0) / this.ratings.length
+			}else{
+				return undefined
+			}
 		},
-		coords: {
-			type: Sequelize.GEOGRAPHY('POINT')
-		},
-		id: {
-			type: DataTypes.UUID,
-			defaultValue: Sequelize.UUIDV4,
-			allowNull: false,
-			primaryKey: true
-		},
-		image: {
-			type: DataTypes.STRING
-		},
-		difficulty: {
-			type: DataTypes.ENUM('beginner', 'intermediate', 'advanced'),
-		}	
-	}, {
-		sequelize,
-		modelName: 'Location'
-	})
-}
+	}
+
+}, {
+	sequelize,
+	modelName: 'Location'
+})
 
 

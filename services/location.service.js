@@ -1,12 +1,13 @@
 const db = require('../models')
 const { Op } = db.Sequelize
-const { Location, SkateObject, Tag } = db.models
+const { Location, SkateObject, Tag, Rating } = db.models
 
-module.exports.find = async (query, sort, filters, userLocation) => {
+// Query All Locations
+module.exports.findLocations = async (query, sort, filters, userLocation) => {
 
 	let finder = {}
 
-	finder.attributes = ['name', 'difficulty', 'id', 'image', 'coords']
+	finder.attributes = ['name', 'difficulty', 'id', 'image', 'coords', 'averageRating']
 	
 	finder.include = [
 		{ 
@@ -20,6 +21,10 @@ module.exports.find = async (query, sort, filters, userLocation) => {
 			as: 'tags',
 			attributes: ['name'],
 			through: { attributes: []}
+		},
+		{
+			model: Rating,
+			as: 'ratings'
 		}
 	]
 
@@ -61,25 +66,28 @@ module.exports.find = async (query, sort, filters, userLocation) => {
 			l = l.toJSON()
 			l.objects = l.objects.map(o => o.name)
 			l.tags = l.tags.map(t => t.name)
+			delete l.ratings
 			return l
 		}))
 }
 
-module.exports.create =	async () => {
+// Create a Location
+module.exports.createLocation =	async () => {
 		
 }
 
-module.exports.skateObject = {
-	findAll: async () => SkateObject.findAll({ attributes: ['name']})
-			.then(objects => objects.map(o => o.name)),
+// Find Location by Id
+module.exports.findLocationById = async (pk) => Location.findByPk(pk)
+	.then(l => {
+		l.reMapCoords()
+		l = l.toJSON()
+		l.objects = l.objects.map(o => o.name)
+		l.tags = l.tags.map(t => t.name)
+		return l
+	})
 
-	create: async (name) => SkateObject.create({name})
-}
+module.exports.findAllObjects = async () => SkateObject.findAll({ attributes: ['name']})
+	.then(objects => objects.map(o => o.name))
 
-module.exports.tag = {
-	findAll: async () => Tag.findAll({ attributes: ['name'] })
-			.then(tags => tags.map(t => t.name)),
-
-	create: async (name) => Tag.create({name})
-}
-
+module.exports.findAllTags = async () => Tag.findAll({ attributes: ['name'] })
+	.then(tags => tags.map(t => t.name))

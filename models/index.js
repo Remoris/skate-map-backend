@@ -13,10 +13,17 @@ if(dbConfig.use_env_variable){
 }
 
 // Reading models
-const modelNames = ['location', 'skate-object', 'tag']
+const modelNames = [
+	'location', 
+	'skate-object', 
+	'tag', 
+	'rating'
+]
+
 modelNames.forEach(m => {
 	require(`./${m}.model.js`)(sequelize)
 })
+
 const models = sequelize.models
 
 // Associations
@@ -25,5 +32,8 @@ models.SkateObject.Location = models.Location.belongsToMany(models.SkateObject, 
 
 models.Location.Tag = models.Tag.belongsToMany(models.Location, { through: 'LocationTags' })
 models.Tag.Location = models.Location.belongsToMany(models.Tag, { through: 'LocationTags', as: 'tags' })
+
+models.Rating.Location = models.Location.hasMany(models.Rating, { as: 'ratings' })
+models.Location.Rating = models.Rating.belongsTo(models.Location)
 
 module.exports = sequelize
