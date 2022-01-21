@@ -1,22 +1,12 @@
-
-version: "3.9"
-services: 
-  web:
-    build: .
-    volumes: 
-    - "./:/usr/src/skate-map-backend"
-    ports: 
-      - "3000:3000"
-    depends_on: 
-      - db
+version: '3.7'
+services:
   db:
-    image: postgis/postgis:13-3.1
-    volumes: 
-      - "./data/db:/var/lib/postgresql/data"
-    ports: 
-      - "5432:5432"
-    environment: 
+    image: postgres
+    container_name: skate-map-db
+    volumes:
+      - ./data/db:/var/lib/postgresl/data
+    environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-
-
-
+    ports:
+      - '5432:5432'
